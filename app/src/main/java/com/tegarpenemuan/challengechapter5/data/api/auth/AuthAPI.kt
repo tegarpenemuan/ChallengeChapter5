@@ -8,10 +8,10 @@ import retrofit2.http.HeaderMap
 import retrofit2.http.POST
 
 interface AuthAPI {
-    @POST("users/login")
-    suspend fun signIn(@Body request: SignInRequest): Response<SignInResponse>
+    @POST("login")
+    suspend fun signIn(@Body data: SignInRequest): Response<SignInResponse>
 
-    @POST("users/register")
+    @POST("register")
     suspend fun signUp(@Body request: SignUpRequest): Response<SignUpResponse>
 
     @GET("users/logout")

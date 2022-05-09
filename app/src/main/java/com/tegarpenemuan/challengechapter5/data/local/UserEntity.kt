@@ -1,4 +1,4 @@
-package com.tegarpenemuan.myapplication.data.local
+package com.tegarpenemuan.challengechapter5.data.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -8,8 +8,9 @@ import androidx.room.PrimaryKey
 data class UserEntity(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "job") val job: String,
-    @ColumnInfo(name = "image") val image: String,
+    @ColumnInfo(name = "email") val email: String,
+    @ColumnInfo(name = "token") val token: String? = null,
+    @ColumnInfo(name = "image") val image: String? = null,
 )
 

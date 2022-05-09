@@ -1,16 +1,22 @@
 package com.tegarpenemuan.challengechapter5.ui.home
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
+import com.tegarpenemuan.challengechapter5.Constant
 import com.tegarpenemuan.challengechapter5.databinding.FragmentHomeBinding
 import com.tegarpenemuan.challengechapter5.ui.home.adapter.ListGenreAdapter
 import com.tegarpenemuan.challengechapter5.ui.home.adapter.MovieNowPlayingAdapter
 import com.tegarpenemuan.challengechapter5.ui.home.adapter.MoviePopulerAdapter
+import com.tegarpenemuan.myapplication.database.MyDatabase
 
 class HomeFragment : Fragment() {
 
@@ -21,6 +27,7 @@ class HomeFragment : Fragment() {
     lateinit var moviePopulerAdapter: MoviePopulerAdapter
     lateinit var movieNowPlayingAdapter: MovieNowPlayingAdapter
     lateinit var listGenreAdapter: ListGenreAdapter
+    private var db: MyDatabase? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,9 +48,18 @@ class HomeFragment : Fragment() {
 
         viewModel.getMoviePopuler()
         viewModel.getListMovie()
+        viewModel.getUser()
         bindViewModel()
 
+        val db = MyDatabase.getInstance(this.requireContext())
+        viewModel.onViewLoaded(db)
+
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        db = MyDatabase.getInstance(requireContext().applicationContext)
     }
 
     private fun bindViewModel() {
@@ -57,6 +73,10 @@ class HomeFragment : Fragment() {
 
         viewModel.shouldShowListGenre.observe(requireActivity()) {
            listGenreAdapter.updateList(it)
+        }
+
+        viewModel.shouldShowUsername.observe(viewLifecycleOwner) {
+            binding.tvTitle.text = it.toString()
         }
     }
 

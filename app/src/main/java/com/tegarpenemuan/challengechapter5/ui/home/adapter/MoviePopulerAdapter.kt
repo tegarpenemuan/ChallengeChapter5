@@ -31,7 +31,7 @@ class MoviePopulerAdapter(private var list: List<MoviePopulerModel>) :
             .into(holder.binding.ivPoster)
         holder.binding.tvTitleMovie.text = item.title
 
-        holder.binding.rating.rating = item.vote_average.toFloat()
+        holder.binding.rating.rating = (item.vote_average ?: 0.0).toFloat()
         holder.binding.rating.stepSize = (0.5).toFloat()
         holder.binding.rating.max = 5
         holder.binding.rating.numStars = 5

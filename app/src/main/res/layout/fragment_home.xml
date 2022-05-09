@@ -19,7 +19,6 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome Tegar 👋"
             android:textColor="@color/color_font"
             android:textSize="15sp"
             app:layout_constraintLeft_toLeftOf="parent"

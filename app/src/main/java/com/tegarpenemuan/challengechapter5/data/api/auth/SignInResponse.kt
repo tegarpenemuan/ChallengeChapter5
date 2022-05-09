@@ -1,12 +1,19 @@
-package com.tegarpenemuan.myapplication.data.api.auth
-
-import com.google.gson.annotations.SerializedName
+package com.tegarpenemuan.challengechapter5.data.api.auth
 
 data class SignInResponse(
-    @SerializedName("user-token") var userToken: String? = null,
-    @SerializedName("objectId") var objectId: String? = null,
-    @SerializedName("name") var name: String? = null,
-    @SerializedName("email") var email: String? = null,
-    @SerializedName("job") var job: String? = null,
-    @SerializedName("image") var image: String? = null
-)
+    val message: String,
+    val success: Boolean,
+    val token: String,
+    val user: User
+) {
+    data class User(
+        val created_at: String,
+        val email: String,
+        val email_verified_at: Any,
+        val id: Int,
+        val image: String,
+        val job: String,
+        val name: String,
+        val updated_at: String
+    )
+}

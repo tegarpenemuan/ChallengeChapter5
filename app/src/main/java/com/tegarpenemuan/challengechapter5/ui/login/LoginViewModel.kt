@@ -1,19 +1,16 @@
 package com.tegarpenemuan.challengechapter5.ui.login
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Patterns
-import android.widget.Toast
 import androidx.core.content.edit
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.tegarpenemuan.challengechapter5.Constant
-import com.tegarpenemuan.challengechapter5.MainActivity
 import com.tegarpenemuan.challengechapter5.data.ErrorResponse
 import com.tegarpenemuan.challengechapter5.network.AuthApiClient
 import com.tegarpenemuan.myapplication.data.api.auth.SignInRequest
-import com.tegarpenemuan.myapplication.data.local.UserEntity
+import com.tegarpenemuan.challengechapter5.data.local.UserEntity
 import com.tegarpenemuan.myapplication.database.MyDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,8 +53,9 @@ class LoginViewModel() : ViewModel() {
     private fun signInFromAPI() {
         CoroutineScope(Dispatchers.IO).launch {
             val request = SignInRequest(
-                login = email,
-                password = password
+                email = email,
+                password = password,
+                device_name = "android"
             )
             val response = AuthApiClient.instanceAuth.signIn(request)
             withContext(Dispatchers.Main) {
@@ -65,15 +63,16 @@ class LoginViewModel() : ViewModel() {
                     val signInResponse = response.body()
                     signInResponse?.let {
                         // mempersiapkan untuk simpan token
-                        insertToken(it.userToken.orEmpty())
+                        insertToken(it.token.orEmpty())
 
                         // mempersiapkan untuk insert ke database
                         val userEntity = UserEntity(
-                            id = it.objectId.orEmpty(),
-                            name = it.name.orEmpty(),
-                            email = it.email.orEmpty(),
-                            job = it.job.orEmpty(),
-                            image = it.image.orEmpty()
+                            id = it.user.id.toString(),
+                            name = it.user.name,
+                            job = it.user.job,
+                            email = it.user.email,
+                            token = it.token,
+                            image = it.user.image
                         )
                         insertProfile(userEntity)
                     }
@@ -90,6 +89,7 @@ class LoginViewModel() : ViewModel() {
         if (token.isNotEmpty()) {
             pref?.edit {
                 putString(Constant.Preferences.KEY.TOKEN, token)
+                putBoolean(Constant.Preferences.KEY.IS_LOGIN, true)
                 apply()
             }
         }

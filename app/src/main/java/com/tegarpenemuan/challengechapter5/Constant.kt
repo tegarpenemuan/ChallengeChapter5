@@ -8,7 +8,7 @@ object Constant {
             const val EMAIL = "EMAIL"
             const val PASSWORD = "PASSWORD"
             const val DARK_MODE = "DARK_MODE"
-            const val APP_LANGUAGE = "APP_LANGUAGE"
+            const val IS_LOGIN = "IS_LOGIN"
         }
     }
 }

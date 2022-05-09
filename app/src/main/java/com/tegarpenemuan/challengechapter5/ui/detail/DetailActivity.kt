@@ -1,4 +1,4 @@
-package com.tegarpenemuan.challengechapter5.ui
+package com.tegarpenemuan.challengechapter5.ui.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

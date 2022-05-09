@@ -10,8 +10,8 @@ import com.tegarpenemuan.challengechapter5.Constant
 import com.tegarpenemuan.challengechapter5.data.ErrorResponse
 import com.tegarpenemuan.challengechapter5.network.AuthApiClient
 import com.tegarpenemuan.myapplication.data.api.auth.SignInRequest
-import com.tegarpenemuan.myapplication.data.api.auth.SignUpRequest
-import com.tegarpenemuan.myapplication.data.local.UserEntity
+import com.tegarpenemuan.challengechapter5.data.api.auth.SignUpRequest
+import com.tegarpenemuan.challengechapter5.data.local.UserEntity
 import com.tegarpenemuan.myapplication.database.MyDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -89,7 +89,7 @@ class RegisterViewModel : ViewModel() {
     private fun processToSignIn() {
         CoroutineScope(Dispatchers.IO).launch {
             val request = SignInRequest(
-                login = email,
+                email = email,
                 password = password
             )
             val response = AuthApiClient.instanceAuth.signIn(request)
@@ -98,15 +98,16 @@ class RegisterViewModel : ViewModel() {
                     val signInResponse = response.body()
                     signInResponse?.let {
                         // mempersiapkan untuk simpan token
-                        insertToken(it.userToken.orEmpty())
+                        insertToken(it.token)
 
                         // mempersiapkan untuk insert ke database
                         val userEntity = UserEntity(
-                            id = it.objectId.orEmpty(),
-                            name = it.name.orEmpty(),
-                            email = it.email.orEmpty(),
-                            job = it.job.orEmpty(),
-                            image = it.image.orEmpty()
+                            id = it.user.id.toString(),
+                            name = it.user.name,
+                            job = it.user.job,
+                            email = it.user.email,
+                            token = it.token,
+                            image = it.user.image
                         )
                         insertProfile(userEntity)
                     }

@@ -1,4 +1,4 @@
-package com.tegarpenemuan.myapplication.data.api.auth
+package com.tegarpenemuan.challengechapter5.data.api.auth
 
 import com.google.gson.annotations.SerializedName
 

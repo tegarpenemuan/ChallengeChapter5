@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object AuthApiClient {
-    const val BASE_URL = "http://drivingrake.backendless.app/api/"
+    const val BASE_URL = "https://tegarpenemuan.xyz/api/"
 
     private val logging: HttpLoggingInterceptor
         get() {

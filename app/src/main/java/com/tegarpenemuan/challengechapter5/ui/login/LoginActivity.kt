@@ -36,6 +36,17 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val pref = this.getSharedPreferences(Constant.Preferences.PREF_NAME, MODE_PRIVATE)
+
+        if (pref.getBoolean(Constant.Preferences.KEY.IS_LOGIN,false)) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
     private fun bindViewModel() {
         viewModel.shouldShowError.observe(this) {
             val snackbar = Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG)

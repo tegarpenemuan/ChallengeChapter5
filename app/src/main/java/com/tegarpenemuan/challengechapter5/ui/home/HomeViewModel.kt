@@ -1,24 +1,31 @@
 package com.tegarpenemuan.challengechapter5.ui.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tegarpenemuan.challengechapter5.model.movie.ListGenreModel
 import com.tegarpenemuan.challengechapter5.model.movie.MoviePopulerModel
 import com.tegarpenemuan.challengechapter5.network.TMDBApiClient
+import com.tegarpenemuan.myapplication.database.MyDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
+    private var db: MyDatabase? = null
 
     val shouldShowMoviePopuler: MutableLiveData<List<MoviePopulerModel>> = MutableLiveData()
     val shouldShowListGenre: MutableLiveData<List<ListGenreModel>> = MutableLiveData()
+    val shouldShowUsername: MutableLiveData<String> = MutableLiveData()
+
+    fun onViewLoaded(db: MyDatabase) {
+        this.db = db
+    }
 
     fun getMoviePopuler() {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = TMDBApiClient.instanceTMDB.getMoviePopuler("0fbaf8c27d542bc99bfc67fb877e3906")
+            val response =
+                TMDBApiClient.instanceTMDB.getMoviePopuler("0fbaf8c27d542bc99bfc67fb877e3906")
             withContext(Dispatchers.IO) {
                 if (response.isSuccessful) {
                     // transformasi atau mapping dari response ke model
@@ -41,7 +48,8 @@ class HomeViewModel : ViewModel() {
 
     fun getListMovie() {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = TMDBApiClient.instanceTMDB.getListGenre("0fbaf8c27d542bc99bfc67fb877e3906")
+            val response =
+                TMDBApiClient.instanceTMDB.getListGenre("0fbaf8c27d542bc99bfc67fb877e3906")
             withContext(Dispatchers.IO) {
                 if (response.isSuccessful) {
                     // transformasi atau mapping dari response ke model
@@ -56,6 +64,18 @@ class HomeViewModel : ViewModel() {
                     shouldShowListGenre.postValue(listGenreModels)
                 }
             }
+        }
+    }
+
+    fun getUser() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val user = db?.userDAO()?.getUsername("tegarpenemuan@gmail.com")
+            user?.let {
+                shouldShowUsername.postValue("Welcome ${it.name} \uD83D\uDC4B")
+            } ?: run {
+                shouldShowUsername.postValue("Welcome Anonymous \uD83D\uDC4B")
+            }
+
         }
     }
 }
